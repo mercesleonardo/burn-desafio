@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\UserResource;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
 use App\Actions\User\{CreateUser, DeleteUser, UpdateUser};
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
-use App\Http\Resources\UserResource;
-use App\Models\User;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -27,7 +28,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request, CreateUser $createUser)
+    public function store(StoreUserRequest $request, CreateUser $createUser): JsonResponse
     {
         $user = $createUser($request->validated());
 

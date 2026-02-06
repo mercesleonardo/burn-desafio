@@ -2,23 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Company;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class CompanySeeder extends Seeder
 {
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        $this->call([
-            CompanySeeder::class,
-        ]);
-
-        User::factory(10)->create();
+        Company::factory(5)->free()->create();
+        Company::factory(2)->premium()->create();
     }
 }
