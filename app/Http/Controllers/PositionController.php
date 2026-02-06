@@ -2,25 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Position;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Resources\PositionResource;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Requests\{StorePositionRequest, UpdatePositionRequest};
 use App\Actions\Position\{ApplyToPosition, CreatePosition, DeletePosition, UpdatePosition};
+use App\Http\Requests\{StorePositionRequest, UpdatePositionRequest};
+use App\Http\Resources\PositionResource;
+use App\Models\Position;
+use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\Response;
 
 class PositionController extends Controller
 {
-    public function index(): JsonResource
+    /**
+     * Lista todas as posições com paginação e cache para performance.
+     * Utiliza cache Redis com tags para invalidação automática em mudanças.
+     */
+    public function index(Request $request): JsonResource
     {
-        return PositionResource::collection(Position::with('company')->paginate());
+        // Chave de cache dinâmica baseada nos parâmetros da requisição (para suporte futuro a filtros)
+        $cacheKey = 'positions:index:' . md5(serialize($request->all()));
+
+        // Cache com tags para invalidação granular
+        $positions = Cache::tags(['positions'])->remember($cacheKey, 300, function () {
+            return Position::with('company')->paginate();
+        });
+
+        return PositionResource::collection($positions);
     }
 
     public function store(StorePositionRequest $request, CreatePosition $createPosition): JsonResponse
     {
         $position = $createPosition($request->validated());
+
+        // Invalida cache após criação para refletir mudanças
+        Cache::tags(['positions'])->flush();
 
         return (new PositionResource($position->load('company')))
             ->response()
@@ -36,6 +51,9 @@ class PositionController extends Controller
     {
         $position = $updatePosition($position, $request->validated());
 
+        // Invalida cache após atualização para refletir mudanças
+        Cache::tags(['positions'])->flush();
+
         return (new PositionResource($position->load('company')))
             ->response()
             ->setStatusCode(Response::HTTP_OK);
@@ -44,6 +62,9 @@ class PositionController extends Controller
     public function destroy(Position $position, DeletePosition $deletePosition): JsonResponse
     {
         $deletePosition($position);
+
+        // Invalida cache após exclusão para refletir mudanças
+        Cache::tags(['positions'])->flush();
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
@@ -54,6 +75,11 @@ class PositionController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        return $applyToPosition($position, $request->user_id);
+        $response = $applyToPosition($position, $request->user_id);
+
+        // Invalida cache após aplicação, pois pode afetar listagens ou contadores futuros
+        Cache::tags(['positions'])->flush();
+
+        return $response;
     }
 }
