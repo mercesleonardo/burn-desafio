@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Enums\CompanyPlan;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -40,16 +39,16 @@ class UpdateCompanyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.string'    => 'O nome da empresa deve ser um texto.',
-            'name.max'       => 'O nome da empresa não pode ter mais de 255 caracteres.',
+            'name.string'        => 'O nome da empresa deve ser um texto.',
+            'name.max'           => 'O nome da empresa não pode ter mais de 255 caracteres.',
             'description.string' => 'A descrição da empresa deve ser um texto.',
-            'description.max' => 'A descrição da empresa não pode ter mais de 1000 caracteres.',
-            'cnpj.string'    => 'O CNPJ deve ser um texto.',
-            'cnpj.size'      => 'O CNPJ deve ter exatamente 14 dígitos.',
-            'cnpj.unique'    => 'Este CNPJ já está cadastrado.',
-            'cnpj.regex'     => 'O CNPJ deve conter apenas números.',
-            'plan.string'    => 'O plano deve ser um texto.',
-            'plan.in'        => 'O plano deve ser free ou premium.',
+            'description.max'    => 'A descrição da empresa não pode ter mais de 1000 caracteres.',
+            'cnpj.string'        => 'O CNPJ deve ser um texto.',
+            'cnpj.size'          => 'O CNPJ deve ter exatamente 14 dígitos.',
+            'cnpj.unique'        => 'Este CNPJ já está cadastrado.',
+            'cnpj.regex'         => 'O CNPJ deve conter apenas números.',
+            'plan.string'        => 'O plano deve ser um texto.',
+            'plan.in'            => 'O plano deve ser free ou premium.',
         ];
     }
 }
