@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Enums\CompanyPlan;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
 class Company extends Model
 {
@@ -28,8 +27,13 @@ class Company extends Model
     //     return $this->hasMany(Job::class);
     // }
 
+    public function positions()
+    {
+        return $this->hasMany(Position::class);
+    }
+
     public function canCreateJob(): bool
     {
-        return $this->jobs()->count() < $this->plan->jobLimit();
+        return $this->positions()->count() < $this->plan->jobLimit();
     }
 }

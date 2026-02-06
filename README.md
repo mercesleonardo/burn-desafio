@@ -1,52 +1,74 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API de Vagas e Candidaturas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta é uma API RESTful desenvolvida em Laravel 12 para gerenciamento de vagas de emprego e candidaturas de usuários. A API permite que empresas criem vagas e usuários se candidatem a elas, com validações específicas e regras de negócio.
 
-## About Laravel
+## Funcionalidades
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Empresas**: Cadastro com CNPJ único, plano (Free ou Premium)
+- **Usuários**: Cadastro com e-mail e CPF únicos
+- **Vagas**: Criação com tipos (PJ, CLT, Estágio), salários e horários obrigatórios para CLT e Estágio
+- **Candidaturas**: Usuários podem se candidatar a vagas
+- **Busca**: Filtrar usuários por nome, e-mail ou CPF, retornando vagas inscritas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.4+
+- Laravel 12
+- MySQL
+- Docker (opcional, via Sail)
 
-## Learning Laravel
+## Instalação
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+1. Clone o repositório
+2. Instale dependências: `composer install`
+3. Configure ambiente: `cp .env.example .env`
+4. Execute migrations: `php artisan migrate`
+5. (Opcional) Use Docker: `./vendor/bin/sail up`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Endpoints da API
 
-## Laravel Sponsors
+### Empresas
+- `GET /api/v1/companies` - Listar empresas
+- `POST /api/v1/companies` - Criar empresa
+- `GET /api/v1/companies/{id}` - Detalhes da empresa
+- `PUT /api/v1/companies/{id}` - Atualizar empresa
+- `DELETE /api/v1/companies/{id}` - Deletar empresa
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Usuários
+- `GET /api/v1/users` - Listar usuários
+- `POST /api/v1/users` - Criar usuário
+- `GET /api/v1/users/{id}` - Detalhes do usuário
+- `PUT /api/v1/users/{id}` - Atualizar usuário
+- `DELETE /api/v1/users/{id}` - Deletar usuário
+- `GET /api/v1/users/search?name=...&email=...&cpf=...` - Buscar usuários
 
-### Premium Partners
+### Vagas
+- `GET /api/v1/positions` - Listar vagas
+- `POST /api/v1/positions` - Criar vaga
+- `GET /api/v1/positions/{id}` - Detalhes da vaga
+- `PUT /api/v1/positions/{id}` - Atualizar vaga
+- `DELETE /api/v1/positions/{id}` - Deletar vaga
+- `POST /api/v1/positions/{id}/apply` - Candidatar-se à vaga
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Regras de Negócio
 
-## Contributing
+- Empresas Free: até 5 vagas
+- Empresas Premium: até 10 vagas
+- Salário mínimo CLT: R$ 1.212,00
+- Horário máximo Estágio: 6 horas/dia
+- Unicidade: e-mail, CPF, CNPJ
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Testes
 
-## Code of Conduct
+Execute testes com: `php artisan test`
+
+## Tecnologias
+
+- Laravel 12
+- Pest para testes
+- MySQL
+- Docker/Sail
+- Pint para formatação de código
 
 In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 

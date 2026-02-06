@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Actions\User\DeleteUser;
+use App\Actions\User\UpdateUser;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Actions\User\CreateUser;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Actions\User\{CreateUser, DeleteUser, UpdateUser};
-use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 
 class UserController extends Controller
 {
@@ -53,6 +57,25 @@ class UserController extends Controller
         $user = $updateUser($user, $request->validated());
 
         return new UserResource($user);
+    }
+
+    public function search(Request $request): JsonResource
+    {
+        $query = User::with('positions.company');
+
+        if ($request->has('name') && $request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->has('email') && $request->email) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        if ($request->has('cpf') && $request->cpf) {
+            $query->where('cpf', $request->cpf);
+        }
+
+        return UserResource::collection($query->paginate());
     }
 
     /**
