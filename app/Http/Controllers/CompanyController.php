@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
-use App\Actions\Company\CreateCompany;
-use App\Actions\Company\DeleteCompany;
-use App\Actions\Company\UpdateCompany;
+use App\Actions\Company\{CreateCompany, DeleteCompany, UpdateCompany};
+use App\Http\Requests\{StoreCompanyRequest, UpdateCompanyRequest};
 use App\Http\Resources\CompanyResource;
-use App\Http\Requests\StoreCompanyRequest;
-use App\Http\Requests\UpdateCompanyRequest;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\Company;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 class CompanyController extends Controller
 {
+    public function __construct()
+    {
+        // $this->authorizeResource(Company::class, 'company');
+    }
     /**
      * Display a listing of the resource.
      */
