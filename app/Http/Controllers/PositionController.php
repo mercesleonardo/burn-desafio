@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Position\{CreatePosition, DeletePosition, UpdatePosition};
-use App\Http\Requests\{StorePositionRequest, UpdatePositionRequest};
-use App\Http\Resources\PositionResource;
 use App\Models\Position;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\PositionResource;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Requests\{StorePositionRequest, UpdatePositionRequest};
+use App\Actions\Position\{ApplyToPosition, CreatePosition, DeletePosition, UpdatePosition};
 
 class PositionController extends Controller
 {
@@ -48,20 +48,12 @@ class PositionController extends Controller
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function apply(Request $request, Position $position): JsonResponse
+    public function apply(Request $request, Position $position, ApplyToPosition $applyToPosition): JsonResponse
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
         ]);
 
-        $user = \App\Models\User::find($request->user_id);
-
-        if ($position->users()->where('user_id', $user->id)->exists()) {
-            return response()->json(['message' => 'Usuário já se candidatou a esta posição.'], 400);
-        }
-
-        $position->users()->attach($user);
-
-        return response()->json(['message' => 'Candidatura realizada com sucesso.'], 200);
+        return $applyToPosition($position, $request->user_id);
     }
 }

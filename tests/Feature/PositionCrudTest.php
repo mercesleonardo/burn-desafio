@@ -97,7 +97,7 @@ test('user applies to position', function () {
 
     $response
         ->assertSuccessful()
-        ->assertJson(['message' => 'Applied successfully.']);
+        ->assertJson(['message' => 'Candidatura realizada com sucesso.']);
 
     $this->assertDatabaseHas('position_user', [
         'user_id' => $user->id,
@@ -119,5 +119,5 @@ test('user cannot apply twice to same position', function () {
 
     $response
         ->assertStatus(400)
-        ->assertJson(['message' => 'User already applied to this position.']);
+        ->assertJson(['message' => 'Usuário já se candidatou a esta posição.']);
 });
