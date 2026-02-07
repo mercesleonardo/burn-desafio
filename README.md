@@ -1,4 +1,4 @@
-# API de Vagas e Candidaturas
+# burh-desafio
 
 Esta é uma API RESTful desenvolvida em Laravel 12 para gerenciamento de vagas de emprego e candidaturas de usuários. A API permite que empresas criem vagas e usuários se candidatem a elas, com validações específicas e regras de negócio.
 
@@ -12,7 +12,7 @@ Esta é uma API RESTful desenvolvida em Laravel 12 para gerenciamento de vagas d
 
 ## Requisitos
 
-- PHP 8.4+
+- PHP 8.5.2
 - Laravel 12
 - MySQL
 - Docker (opcional, via Sail)
@@ -25,30 +25,36 @@ Esta é uma API RESTful desenvolvida em Laravel 12 para gerenciamento de vagas d
 4. Execute migrations: `php artisan migrate`
 5. (Opcional) Use Docker: `./vendor/bin/sail up`
 
+## Desenvolvimento
+
+- Execute testes: `php artisan test`
+- Formate código: `vendor/bin/pint --dirty --format agent`
+- Para testar a API, importe a coleção do Postman localizada em `docs/burh.postman_collection.json`
+
 ## Endpoints da API
 
 ### Empresas
 - `GET /api/v1/companies` - Listar empresas
 - `POST /api/v1/companies` - Criar empresa
-- `GET /api/v1/companies/{id}` - Detalhes da empresa
-- `PUT /api/v1/companies/{id}` - Atualizar empresa
-- `DELETE /api/v1/companies/{id}` - Deletar empresa
+- `GET /api/v1/companies/{company}` - Detalhes da empresa
+- `PUT /api/v1/companies/{company}` - Atualizar empresa
+- `DELETE /api/v1/companies/{company}` - Deletar empresa
 
 ### Usuários
 - `GET /api/v1/users` - Listar usuários
 - `POST /api/v1/users` - Criar usuário
-- `GET /api/v1/users/{id}` - Detalhes do usuário
-- `PUT /api/v1/users/{id}` - Atualizar usuário
-- `DELETE /api/v1/users/{id}` - Deletar usuário
-- `GET /api/v1/users/search?name=...&email=...&cpf=...` - Buscar usuários
+- `GET /api/v1/users/{user}` - Detalhes do usuário
+- `PUT /api/v1/users/{user}` - Atualizar usuário
+- `DELETE /api/v1/users/{user}` - Deletar usuário
+- `GET /api/v1/users/search` - Buscar usuários (parâmetros: name, email, cpf)
 
 ### Vagas
 - `GET /api/v1/positions` - Listar vagas
 - `POST /api/v1/positions` - Criar vaga
-- `GET /api/v1/positions/{id}` - Detalhes da vaga
-- `PUT /api/v1/positions/{id}` - Atualizar vaga
-- `DELETE /api/v1/positions/{id}` - Deletar vaga
-- `POST /api/v1/positions/{id}/apply` - Candidatar-se à vaga
+- `GET /api/v1/positions/{position}` - Detalhes da vaga
+- `PUT /api/v1/positions/{position}` - Atualizar vaga
+- `DELETE /api/v1/positions/{position}` - Deletar vaga
+- `POST /api/v1/positions/{position}/apply` - Candidatar-se à vaga
 
 ## Regras de Negócio
 
@@ -57,10 +63,6 @@ Esta é uma API RESTful desenvolvida em Laravel 12 para gerenciamento de vagas d
 - Salário mínimo CLT: R$ 1.212,00
 - Horário máximo Estágio: 6 horas/dia
 - Unicidade: e-mail, CPF, CNPJ
-
-## Testes
-
-Execute testes com: `php artisan test`
 
 ## Tecnologias
 
@@ -79,4 +81,3 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# burn-desafio
