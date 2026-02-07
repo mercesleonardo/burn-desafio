@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use App\Actions\User\DeleteUser;
-use App\Actions\User\UpdateUser;
-use Illuminate\Http\JsonResponse;
+use App\Actions\User\{CreateUser, DeleteUser, UpdateUser};
+use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 use App\Http\Resources\UserResource;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Actions\User\CreateUser;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\User;
+use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Http\Resources\Json\JsonResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {

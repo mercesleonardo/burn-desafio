@@ -22,8 +22,9 @@ class Position extends Model
     ];
 
     protected $casts = [
-        'type'   => PositionType::class,
-        'salary' => 'decimal:2',
+        'type'     => PositionType::class,
+        'salary'   => 'decimal:2',
+        'schedule' => 'integer',
     ];
 
     public function company(): BelongsTo

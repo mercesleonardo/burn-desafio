@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Position;
-use App\Models\Company;
+use App\Models\{Company, Position};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -10,12 +9,12 @@ test('creates a position', function () {
     $company = Company::factory()->create();
 
     $payload = [
-        'company_id' => $company->id,
-        'title' => 'Desenvolvedor Backend',
+        'company_id'  => $company->id,
+        'title'       => 'Desenvolvedor Backend',
         'description' => 'Vaga para desenvolvedor backend',
-        'type' => 'clt',
-        'salary' => 3000.00,
-        'schedule' => '40 horas/semana',
+        'type'        => 'clt',
+        'salary'      => 3000.00,
+        'schedule'    => '40 horas/semana',
     ];
 
     $response = $this->postJson('/api/v1/positions', $payload);
@@ -28,7 +27,7 @@ test('creates a position', function () {
 
     $this->assertDatabaseHas('positions', [
         'title' => $payload['title'],
-        'type' => $payload['type'],
+        'type'  => $payload['type'],
     ]);
 });
 
@@ -42,7 +41,7 @@ test('lists positions with pagination', function () {
         ->assertJsonStructure([
             'data',
             'links' => ['first', 'last', 'prev', 'next'],
-            'meta' => ['current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'],
+            'meta'  => ['current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'],
         ]);
 });
 
@@ -70,7 +69,7 @@ test('updates a position', function () {
         ->assertJsonPath('data.title', $payload['title']);
 
     $this->assertDatabaseHas('positions', [
-        'id' => $position->id,
+        'id'    => $position->id,
         'title' => $payload['title'],
     ]);
 });
@@ -87,7 +86,7 @@ test('deletes a position', function () {
 
 test('user applies to position', function () {
     $position = Position::factory()->create();
-    $user = \App\Models\User::factory()->create();
+    $user     = \App\Models\User::factory()->create();
 
     $payload = [
         'user_id' => $user->id,
@@ -100,14 +99,14 @@ test('user applies to position', function () {
         ->assertJson(['message' => 'Candidatura realizada com sucesso.']);
 
     $this->assertDatabaseHas('position_user', [
-        'user_id' => $user->id,
+        'user_id'     => $user->id,
         'position_id' => $position->id,
     ]);
 });
 
 test('user cannot apply twice to same position', function () {
     $position = Position::factory()->create();
-    $user = \App\Models\User::factory()->create();
+    $user     = \App\Models\User::factory()->create();
 
     $position->users()->attach($user);
 

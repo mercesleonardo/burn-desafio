@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'cpf'      => 'required|string|unique:users,cpf',
+            'cpf'      => 'required|string|size:11|unique:users,cpf',
             'age'      => 'required|integer|min:18',
             'password' => 'required|string|min:8|confirmed',
         ];
@@ -46,7 +46,7 @@ class StoreUserRequest extends FormRequest
             'email.unique'       => 'O email informado já está registrado.',
             'cpf.required'       => 'O campo CPF é obrigatório.',
             'cpf.string'         => 'O campo CPF deve ser um texto.',
-            'cpf.unique'         => 'O CPF informado já está registrado.',
+            'cpf.size'           => 'O campo CPF deve ter exatamente 11 caracteres.',
             'age.required'       => 'O campo idade é obrigatório.',
             'age.integer'        => 'O campo idade deve ser um número inteiro.',
             'age.min'            => 'O campo idade deve ser maior ou igual a 18.',

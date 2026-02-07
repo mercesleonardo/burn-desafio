@@ -22,11 +22,6 @@ class Company extends Model
         'plan' => CompanyPlan::class,
     ];
 
-    // public function jobs()
-    // {
-    //     return $this->hasMany(Job::class);
-    // }
-
     public function positions()
     {
         return $this->hasMany(Position::class);

@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->text('description');
             $table->string('type');
             $table->decimal('salary', 10, 2)->nullable();
-            $table->string('schedule')->nullable();
+            $table->integer('schedule')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

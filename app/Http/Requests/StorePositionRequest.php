@@ -28,7 +28,7 @@ class StorePositionRequest extends FormRequest
             'description' => 'required|string',
             'type'        => 'required|in:pj,clt,estagio',
             'salary'      => 'nullable|numeric|min:0',
-            'schedule'    => 'nullable|string|max:255',
+            'schedule'    => 'nullable|integer|min:1',
         ];
     }
 
@@ -54,11 +54,14 @@ class StorePositionRequest extends FormRequest
             }
 
             if ($type === 'estagio' && !is_null($schedule)) {
-                // Assuming schedule is like "X horas/semana", check max 6
-                if (preg_match('/(\d+) horas\/semana/', $schedule, $matches)) {
-                    if ($matches[1] > 6) {
-                        $validator->errors()->add('schedule', 'Posições de Estágio não podem ter mais de 6 horas por semana.');
-                    }
+                if ($schedule > 6) {
+                    $validator->errors()->add('schedule', 'Posições de Estágio não podem ter mais de 6 horas por dia.');
+                }
+            }
+
+            if ($type === 'clt' && !is_null($schedule)) {
+                if ($schedule > 9) {
+                    $validator->errors()->add('schedule', 'Posições CLT não podem ter mais de 9 horas por dia.');
                 }
             }
 

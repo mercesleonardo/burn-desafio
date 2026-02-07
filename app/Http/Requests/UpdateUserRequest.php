@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name'     => 'sometimes|string|max:255',
             'email'    => 'sometimes|email|unique:users,email,' . $this->route('user')->id,
-            'cpf'      => 'sometimes|string|unique:users,cpf,' . $this->route('user')->id,
+            'cpf'      => 'sometimes|string|size:11|unique:users,cpf,' . $this->route('user')->id,
             'age'      => 'sometimes|integer|min:18',
             'password' => 'sometimes|string|min:8|confirmed',
         ];
@@ -43,7 +43,7 @@ class UpdateUserRequest extends FormRequest
             'email.email'        => 'O campo email deve estar em um formato válido.',
             'email.unique'       => 'O email informado já está registrado.',
             'cpf.string'         => 'O campo CPF deve ser um texto.',
-            'cpf.unique'         => 'O CPF informado já está registrado.',
+            'cpf.size'           => 'O campo CPF deve ter exatamente 11 caracteres.',
             'age.integer'        => 'O campo idade deve ser um número inteiro.',
             'age.min'            => 'O campo idade deve ser maior ou igual a 18.',
             'password.string'    => 'O campo senha deve ser um texto.',
