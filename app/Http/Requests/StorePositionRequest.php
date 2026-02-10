@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PositionType;
 use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -39,30 +40,24 @@ class StorePositionRequest extends FormRequest
             $salary   = $this->input('salary');
             $schedule = $this->input('schedule');
 
-            if (in_array($type, ['clt', 'estagio'])) {
+            $positionType = PositionType::from($type);
+
+            if ($positionType->requiresSalaryAndSchedule()) {
                 if (is_null($salary)) {
-                    $validator->errors()->add('salary', 'Salário é obrigatório para posições CLT e Estágio.');
+                    $validator->errors()->add('salary', 'Salário é obrigatório para posições ' . $positionType->label() . '.');
                 }
 
                 if (is_null($schedule)) {
-                    $validator->errors()->add('schedule', 'Horário é obrigatório para posições CLT e Estágio.');
+                    $validator->errors()->add('schedule', 'Horário é obrigatório para posições ' . $positionType->label() . '.');
                 }
             }
 
-            if ($type === 'clt' && $salary < 1212) {
-                $validator->errors()->add('salary', 'Posições CLT devem ter um salário mínimo de R$1212,00.');
+            if (!is_null($salary) && $positionType->minSalary() && $salary < $positionType->minSalary()) {
+                $validator->errors()->add('salary', 'Posições ' . $positionType->label() . ' devem ter um salário mínimo de R$' . number_format($positionType->minSalary(), 2, ',', '.') . '.');
             }
 
-            if ($type === 'estagio' && !is_null($schedule)) {
-                if ($schedule > 6) {
-                    $validator->errors()->add('schedule', 'Posições de Estágio não podem ter mais de 6 horas por dia.');
-                }
-            }
-
-            if ($type === 'clt' && !is_null($schedule)) {
-                if ($schedule > 9) {
-                    $validator->errors()->add('schedule', 'Posições CLT não podem ter mais de 9 horas por dia.');
-                }
+            if (!is_null($schedule) && $positionType->maxScheduleHours() && $schedule > $positionType->maxScheduleHours()) {
+                $validator->errors()->add('schedule', 'Posições ' . $positionType->label() . ' não podem ter mais de ' . $positionType->maxScheduleHours() . ' horas por dia.');
             }
 
             // Check company limit

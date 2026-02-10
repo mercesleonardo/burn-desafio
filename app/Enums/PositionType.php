@@ -34,6 +34,7 @@ enum PositionType: string
     {
         return match ($this) {
             self::ESTAGIO => 6,
+            self::CLT     => 9,
             default       => null,
         };
     }

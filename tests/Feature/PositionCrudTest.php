@@ -14,7 +14,7 @@ test('creates a position', function () {
         'description' => 'Vaga para desenvolvedor backend',
         'type'        => 'clt',
         'salary'      => 3000.00,
-        'schedule'    => '40 horas/semana',
+        'schedule'    => 8,
     ];
 
     $response = $this->postJson('/api/v1/positions', $payload);
